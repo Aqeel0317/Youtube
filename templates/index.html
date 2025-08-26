@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeniusTube Transcript Analyzer</title>
+  <!-- Importing Google Fonts for modern typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Basic resets and typography settings */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      color: #fff;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    /* Container that holds all content sections */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    /* Loader overlay styles */
+    .loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 999;
+    }
+    .loader-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .loader {
+      border: 8px solid rgba(255, 255, 255, 0.3);
+      border-top: 8px solid #fff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    .loader-text {
+      font-size: 1.5em;
+      font-weight: 700;
+      animation: pulse 1.5s infinite;
+    }
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 100px 20px;
+    }
+    .hero h1 {
+      font-size: 4em;
+      margin-bottom: 20px;
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero p {
+      font-size: 1.5em;
+      margin-bottom: 40px;
+      animation: fadeInUp 1s ease-out;
+    }
+    /* Features Section */
+    .features {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 20px;
+      margin-bottom: 60px;
+      flex-wrap: wrap;
+    }
+    .feature-card {
+      background: linear-gradient(135deg, #1F1C2C, #928DAB);  /* Modern AI-inspired color scheme */
+      border-radius: 10px;
+      padding: 20px;
+      width: 300px;
+      transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .feature-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
+    .feature-card p {
+      font-size: 1em;
+    }
+    /* Call-to-Action (CTA) Section */
+    .cta {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .cta button {
+      padding: 15px 40px;
+      font-size: 1.3em;
+      color: #5563DE;
+      background-color: #fff;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: popIn 1s ease-out;
+    }
+    .cta button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    /* URL Input Form styles */
+    .form-container {
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: slideUp 1s forwards;
+      animation-delay: 0.5s;
+      display: none;
+      text-align: center;
+    }
+    form {
+      display: inline-block;
+    }
+    input[type="text"] {
+      width: 320px;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 30px;
+      margin-bottom: 20px;
+      font-size: 1em;
+      transition: transform 0.3s ease, border 0.3s ease;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      transform: scale(1.02);
+      border: 2px solid #fff;
+    }
+    input[type="submit"] {
+      padding: 15px 30px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      background-color: #fff;
+      color: #5563DE;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    input[type="submit"]:hover {
+      background-color: #f0f0f0;
+      transform: scale(1.05);
+    }
+    /* Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0% { opacity: 0.7; }
+      50% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 3em; }
+      .hero p { font-size: 1.2em; }
+      .feature-card { width: 90%; margin: 10px auto; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader Overlay -->
+  <div id="loaderOverlay" class="loader-overlay">
+    <div class="loader"></div>
+    <div class="loader-text">Processing Your Video...</div>
+  </div>
+
+  <!-- Main Landing Page -->
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Welcome to GeniusTube</h1>
+      <p>Your personalized YouTube Transcript Analyzer that converts video content into clear insights.</p>
+    </div>
+  </section>
+
+  <!-- Features Section (cards in a row) -->
+  <section class="features">
+    <div class="container" style="display:flex; flex-wrap: nowrap; justify-content: center;">
+      <div class="feature-card">
+        <h3>Accurate Transcripts</h3>
+        <p>Get detailed transcripts in multiple languages quickly.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Instant Analysis</h3>
+        <p>Our AI-powered system provides concise summaries and highlights key points.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Smart Chatbot</h3>
+        <p>Ask questions about your video content and get immediate, relevant answers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call-to-Action Section -->
+  <section class="cta">
+    <div class="container">
+      <button id="getStartedBtn">Get Started</button>
+    </div>
+  </section>
+
+  <!-- URL Input Form Section (revealed after Get Started) -->
+  <section class="form-container" id="urlFormSection">
+    <div class="container">
+      <form id="videoUrlForm" method="POST" action="/">
+        <input type="text" name="video_url" placeholder="Enter YouTube Video URL" required />
+        <br />
+        <input type="submit" value="Analyze Video" />
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // Elements for section switching
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    const urlFormSection = document.getElementById('urlFormSection');
+    const videoUrlForm = document.getElementById('videoUrlForm');
+    const loaderOverlay = document.getElementById('loaderOverlay');
+
+    // On clicking "Get Started", scroll to the form and reveal it with animation
+    getStartedBtn.addEventListener('click', () => {
+      urlFormSection.style.display = 'block';
+      urlFormSection.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // On form submission, show the processing overlay
+    videoUrlForm.addEventListener('submit', () => {
+      loaderOverlay.classList.add('active');
+    });
+  </script>
+</body>
+</html>
